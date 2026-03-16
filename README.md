@@ -45,3 +45,22 @@ SAM-V1/
 │   ├── system.py        # The Skeleton (OS & hardware control)
 │   ├── web.py           # The Eyes (Web & YouTube search)
 │   └── fun.py           # The Wit (Utility & entertainment)
+
+⚡ Setup & Installation
+1. Clone the Repository
+Bash
+git clone [https://github.com/ayushdas24/SAM-V1.git](https://github.com/ayushdas24/SAM-V1.git)
+cd SAM-V1
+2. Install Dependencies
+Bash
+pip install -r requirements.txt
+3. Configure API Key
+Insert your Gemini API key inside main.py or modules/brain.py.
+
+4. Run SAM
+Bash
+python main.py
+👤 Author
+Ayush Das AI Developer & Penetration Tester
+
+🏴 Join the network. We Are Many. We Are DedSec.
