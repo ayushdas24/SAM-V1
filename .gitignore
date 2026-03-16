@@ -1,0 +1,6 @@
+venv/
+Lib/
+Scripts/
+Doc/
+.vscode/
+__pycache__/
