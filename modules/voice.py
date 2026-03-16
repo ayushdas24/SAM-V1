@@ -1,6 +1,17 @@
 import threading  
 import speech_recognition as sr  
-from modules.config import engine, speak_queue  
+import pyttsx3
+from queue import Queue 
+
+
+#1.Initialize the TTS Engine properly
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+engine.setProperty('rate', 180)
+
+speak_queue = Queue()
+
 
 def speaker_loop():  
     while True:  
@@ -12,10 +23,14 @@ def speaker_loop():
             engine.runAndWait()  
         except Exception as e:  
             print("TTS error", e)  
+        finally:
+            speak_queue.task_done()
 
 threading.Thread(target=speaker_loop, daemon=True).start()  
 
 def speak(text: str, wait=True):  
+    if not text:
+        return
     if wait:  
         engine.say(text)  
         engine.runAndWait()  
@@ -24,11 +39,14 @@ def speak(text: str, wait=True):
 
 def listen(timeout=15):  
     recognizer = sr.Recognizer()  
+    #sensitivity adjustments
+    recognizer.dynamic_energy_threshold = True
+
     with sr.Microphone() as source:  
-        recognizer.adjust_for_ambient_noise(source, duration=1)  
+        recognizer.adjust_for_ambient_noise(source, duration=0.5)  
         print("listening...")  
         try:  
-            audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=timeout)  
+            audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=10)  
         except sr.WaitTimeoutError:  
             return None  
     try:    
@@ -36,8 +54,8 @@ def listen(timeout=15):
         print(f"you said {command}")    
         return command.lower()    
     except sr.UnknownValueError:    
-        speak("I could not understand. please say it again.")    
+          
         return None    
     except sr.RequestError:    
-        speak("I couldn't connect to speech services.")     
+        print("Network Error : I couldn't connect to speech services")    
         return None
