@@ -1,6 +1,23 @@
+# Virtual Environment 
 venv/
+env/
+ENV/
 Lib/
 Scripts/
-Doc/
-.vscode/
+pyvenv.cfg
+
+# Python Cache
 __pycache__/
+*.py[cod]
+*$py.class
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# Word Docs 
+*.docx
+*.doc
+
+# Personal API Keys / Secrets
+.env
