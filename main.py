@@ -4,7 +4,7 @@ import sys
 # Initial Greeting
 voice.speak("All systems online, sir.")  
 
-SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key="AIzaSyBP4gcDVA8kESwXAEgh0l_t_FBl44pJG6I")
+SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key="")
 
 while True:  
     command = voice.listen(timeout=15)
