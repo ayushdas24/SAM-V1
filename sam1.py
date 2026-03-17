@@ -14,7 +14,7 @@ from duckduckgo_search import DDGS
 from datetime import datetime
 
 # ── 1. CONFIGURATION & BRAIN ──────────────────────────────
-API_KEY = "YOUR_GEMINI_API_KEY"  # 🚩 Insert your API key here
+API_KEY = "YOUR_GEMINI_API_KEY"  #  Insert your API key here
 genai.configure(api_key=API_KEY)
 
 class SAMGenerativeBrain:
@@ -171,7 +171,7 @@ if __name__ == "__main__":
         # 6. GENERATIVE BRAIN
         else:
             if len(command) > 1:
-                print("🧠 Routing to Gemini...")
+                print(" Routing to Gemini...")
                 ai_reply = brain_instance.think(command)
                 print(f"SAM: {ai_reply}")
                 speak(ai_reply)
