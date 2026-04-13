@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAM-V1 // Neural Link</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="background-matrix"></div>
+    <div class="crt-overlay"></div>
+    
+    <div class="dashboard">
+        <header class="header neon-border">
+            <h1>SAM-V1 <span>[SYSTEM AUTOMATION MODULE]</span></h1>
+            <div class="status-indicator">
+                <span class="blinking-dot"></span>
+                <span id="connection-status">LINK ESTABLISHED</span>
+            </div>
+        </header>
+
+        <main class="grid-container">
+            <!-- Left Column: Status / Orb -->
+            <section class="panel orb-panel neon-border glass">
+                <div class="orb-container">
+                    <div id="ai-orb" class="orb idle"></div>
+                </div>
+                <h2 id="ai-state">IDLE</h2>
+                <p id="ai-subtext">Awaiting Wake Word...</p>
+            </section>
+
+            <!-- Right Column: Console Log -->
+            <section class="panel console-panel neon-border glass">
+                <div class="panel-header">
+                    <h3>NEURAL FEED</h3>
+                    <div class="decor-squares">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div id="console-log" class="console-output">
+                    <p class="sys-msg">> Initializing SAM-V1 Core...</p>
+                    <p class="sys-msg">> DedSec protocols active.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer glass">
+            <p>WARNING: UNAUTHORIZED ACCESS PROHIBITED. <span class="neon-text">WE ARE DEDSEC.</span></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

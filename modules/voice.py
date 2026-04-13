@@ -28,34 +28,78 @@ def speaker_loop():
 
 threading.Thread(target=speaker_loop, daemon=True).start()  
 
-def speak(text: str, wait=True):  
-    if not text:
-        return
-    if wait:  
-        engine.say(text)  
-        engine.runAndWait()  
-    else:  
-        speak_queue.put(text)  
+def speak(text: str):
+    """Non-blocking. queues text to be spoken in background"""
+    if text:
+        speak_queue.put(text)
 
-def listen(timeout=15):  
-    recognizer = sr.Recognizer()  
-    #sensitivity adjustments
+def speak_now(text: str):
+    """Blocking. speaks immediately, waits until done.
+       Use this for boot messages and shutdown confirmation"""
+    if text:
+        engine.say(text)
+        engine.runAndWait()
+
+def listen_for_wake_word(wake_word: str) -> bool:
+    """
+    Short 3-second listen window.
+    Returns True if wake word detected, False otherwise.
+    Called in a tight loop - stays CPU-light because of short timeout.
+    """
+    recognizer = sr.Recognizer()
     recognizer.dynamic_energy_threshold = True
 
-    with sr.Microphone() as source:  
-        recognizer.adjust_for_ambient_noise(source, duration=0.5)  
-        print("listening...")  
-        try:  
-            audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=10)  
-        except sr.WaitTimeoutError:  
-            return None  
-    try:    
-        command = recognizer.recognize_google(audio)    
-        print(f"you said {command}")    
-        return command.lower()    
-    except sr.UnknownValueError:    
-          
-        return None    
-    except sr.RequestError:    
-        print("Network Error : I couldn't connect to speech services")    
+    try:
+        with sr.Microphone() as source:
+            recognizer.adjust_for_ambient_noise(source, duration=0.2)
+            audio = recognizer.listen(source, timeout=3, phrase_time_limit=3)
+
+        text = recognizer.recognize_google(audio).lower()
+        print(f"[Passive] Heard: {text}")
+
+        if wake_word in text:
+            return True
+
+    except sr.WaitTimeoutError:
+        pass             #normal silence during pssive listening
+    except sr.UnknownValueError:
+        pass             #Normal - background noise
+    except sr.RequestError:
+        print("[voice] Network error- speech service unreachable.")
+    except Exception as e:
+        print(f"[Passive listen Error] {e}")
+
+    return False
+
+def listen_for_command() -> str | None:
+    """
+    Activated after wake word is detected.
+    Longer window - gives user time to speak a full command
+    Returns the spoken command as Lowercase string, or None.
+    """
+    recognizer = sr.Recognizer()
+    recognizer.dynamic_energy_threshold = True
+
+    try:
+        with sr.Microphone() as source:
+            recognizer.adjust_for_ambient_noise(source, duration=0.3)
+            print("[SAM] Ready - speak your command...")
+
+            audio = recognizer.listen(source, timeout=10 , phrase_time_limit=8)
+
+        command = recognizer.recognize_google(audio).lower().strip()
+        print(f"[command] You said: {command}")
+        return command
+    
+    except sr.WaitTimeoutError:
+        speak("I dont hear anything, Sir.")
+        return None
+    except sr.UnknownValueError:
+        speak("couldn't catch that.")
+        return None
+    except sr.RequestError:
+        speak("speech services is offline")
+        return None
+    except Exception as e:
+        print(f"[command listen Error] {e}")
         return None

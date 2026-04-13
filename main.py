@@ -1,13 +1,34 @@
-from modules import voice, apps, system, web, fun, brain
+import os
 import sys
+from dotenv import load_dotenv
+from modules import voice, router, brain
+
+# Load environment variables
+load_dotenv()
+API_KEY = os.getenv("GEMINI_API_KEY", "")
+
+if not API_KEY or API_KEY == "your_api_key_here":
+    voice.speak("Warning. Gemini API Key is missing. Please check your dot env file.")
+    print("[WARNING] GEMINI_API_KEY not found in .env. Brain module disabled.")
+    # We could exit, but maybe they just want local commands
+    SAM_V1_BRAIN = None
+else:
+    SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key=API_KEY)
 
 # Initial Greeting
 voice.speak("All systems online, sir.")  
 
-SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key="")
-
 while True:  
-    command = voice.listen(timeout=15)
+    # 1. Passive Listening Phase
+    print("\n[Passive] Waiting for wake word 'sam'...")
+    awake = voice.listen_for_wake_word("sam")
+    
+    if not awake:
+        continue
+    
+    # 2. Active Command Phase
+    voice.speak("Yes Sir?")
+    command = voice.listen_for_command()
     
     if command is None: 
         continue
@@ -15,58 +36,20 @@ while True:
     command = command.lower().strip()
     print(f"DEBUG: You said -> {command}") 
 
-    # 1. EXIT
+    # EXIT
     if "exit" in command or "quit" in command:
         voice.speak("Systems offline.")
         sys.exit()
 
-    # 2. SYSTEM CONTROLS
-    elif "battery" in command or "status" in command:
-        print("!!! TRIGGERED: BATTERY !!!")
-        system.system_status()
-    
-    elif "lock" in command:
-        print("!!! TRIGGERED: LOCK !!!")
-        system.lock_system()
+    # ROUTE LOCAL COMMANDS
+    handled_locally = router.route_command(command)
 
-    elif "volume up" in command:
-        print("!!! TRIGGERED: VOL UP !!!")
-        system.volume_up()
-
-    elif "volume down" in command:
-        print("!!! TRIGGERED: VOL DOWN !!!")
-        system.volume_down()
-
-    # 3. FUN & INFO
-    elif "joke" in command:
-        print("!!! TRIGGERED: JOKE !!!")
-        fun.tell_jokes()
-
-    elif "time" in command:
-        print("!!! TRIGGERED: TIME !!!")
-        fun.tell_time()
-
-    elif "date" in command:
-        print("!!! TRIGGERED: DATE !!!")
-        fun.tell_date()
-
-    elif "screenshot" in command:
-        print("!!! TRIGGERED: SCREENSHOT !!!")
-        fun.take_screenshot()
-
-    # 4. WEB & APPS
-    elif "play" in command:
-        print("!!! TRIGGERED: PLAY !!!")
-        web.youtube_play(command)
-
-    elif "search" in command:
-        print("!!! TRIGGERED: SEARCH !!!")
-        web.search_web(command)
-
-    # 5. BRAIN (If nothing else matched)
-    else:
-        if len(command) > 1: # Make sure it's not just a random noise
+    # BRAIN (If nothing else matched)
+    if not handled_locally:
+        if SAM_V1_BRAIN and len(command) > 1: # Make sure it's not just a random noise
             print("!!! TRIGGERED: BRAIN !!!")
             ai_reply = SAM_V1_BRAIN.think(command)
             print(f"SAM: {ai_reply}")
             voice.speak(ai_reply)
+        elif not SAM_V1_BRAIN:
+            voice.speak("I cannot process that command locally, and my neural link is offline.")
