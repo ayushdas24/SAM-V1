@@ -31,8 +31,6 @@ class SAMGenerativeBrain:
 
     def think(self, user_input):
         try:
-            # We no longer manually prepend the identity string; it is baked into the model architecture!
-            # The chat object inherently remembers previous messages across the loop (Stateful Context Memory)
             response = self.chat.send_message(user_input)
             return response.text
         
@@ -43,4 +41,4 @@ class SAMGenerativeBrain:
             if "429" in error_text or "Quota exceeded" in error_text:
              return "Gemini quota is exhausted right now, sir. Local commands are still online."
     
-        return "My neural link is flickering, sir. Encountered an execution error in the tool pipeline."
+            return "My neural link is flickering, sir. Encountered an execution error in the tool pipeline."

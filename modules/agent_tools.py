@@ -33,13 +33,12 @@ def sys_shutdown() -> str:
 def sys_restart() -> str:
     """Initiates a computer reboot sequence. Use with extreme caution."""
     system.restart()
-    return "Action Successful: Initiated system reboot sequence."
+    return "Action successfully: initiated system restart sequence."
 
 def sys_status() -> str:
     """Retrieves the current battery percentage and system health status."""
-    system.system_status()
-    return "Action Successful: Battery and system status executed." 
-
+    return system.system_status()
+    
 def util_get_time() -> str:
     """Retrieves the exact current local time."""
     return fun.get_time()
@@ -55,18 +54,18 @@ def util_take_screenshot() -> str:
     
 def search_wikipedia_duckduckgo(query: str) -> str:
     """Searches the internet / DuckDuckGo for general knowledge, data lookup, or wiki dumps."""
-    web.search_web(query)
-    return f"Action Successful: OSINT executed via DuckDuckGo for context '{query}'."
+    return web.search_web(query)
+    
 
 def search_google(query: str) -> str:
     """Forcibly opens a google search engine page in the user's web browser."""
-    web.google_search(query)
-    return f"Action Successful: Google search initiated in host browser for '{query}'."
+    return web.google_search(query)
+   
 
 def play_youtube(query: str) -> str:
     """Opens and plays a YouTube stream/video matching the given phrase."""
-    web.youtube_play(query)
-    return f"Action Successful: YouTube streaming initiated for '{query}'."
+    return web.youtube_play(query)
+   
 
 def launch_application(app_name: str) -> str:
     """Launches a desktop application by name natively (e.g. discord, notepad, chrome, vscode, terminal)."""
