@@ -2,6 +2,7 @@ import threading
 import speech_recognition as sr  
 import pyttsx3
 from queue import Queue 
+from modules.config import MIC_DEVICE_INDEX
 
 
 #1.Initialize the TTS Engine properly
@@ -50,7 +51,7 @@ def listen_for_wake_word(wake_word: str) -> bool:
     recognizer.dynamic_energy_threshold = True
 
     try:
-        with sr.Microphone(device_index=1) as source:
+        with sr.Microphone(device_index=MIC_DEVICE_INDEX) as source:
             recognizer.adjust_for_ambient_noise(source, duration=0.5)
             audio = recognizer.listen(source, timeout=5, phrase_time_limit=4)
 
@@ -84,7 +85,7 @@ def listen_for_command() -> str | None:
     recognizer.dynamic_energy_threshold = True
 
     try:
-        with sr.Microphone(device_index=1) as source:
+        with sr.Microphone(device_index=MIC_DEVICE_INDEX) as source:
             recognizer.adjust_for_ambient_noise(source, duration=0.5)
             print("[SAM] Ready - speak your command...")
 
