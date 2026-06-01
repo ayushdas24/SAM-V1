@@ -37,7 +37,7 @@ def sys_restart() -> str:
 
 def sys_status() -> str:
     """Retrieves the current battery percentage and system health status."""
-    return system.system_status()
+    return system.system_status(should_speak=False)
     
 def util_get_time() -> str:
     """Retrieves the exact current local time."""

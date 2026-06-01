@@ -16,7 +16,7 @@ def lock_system():
     speak("Locking your system now.")  
     ctypes.windll.user32.LockWorkStation()  
 
-def system_status():  
+def system_status(should_speak=True):  
     battery = psutil.sensors_battery()  
 
     if battery:  
@@ -24,12 +24,20 @@ def system_status():
         charging = "charging" if battery.power_plugged else "not charging"  
         status = f"Battery is at {percent}% and is currently {charging}"
         print(f"[system] {status}")
-        speak(status)
-        return status 
+
+        if should_speak:
+           speak(status)
+
+        return status
+     
     else:
+
         msg= "Sorry, I couldn't fetch battery information."  
         print(f"[system] {msg}")
-        speak(msg)
+
+        if should_speak:
+         speak(msg)
+
         return msg
 
 def volume_up():  
