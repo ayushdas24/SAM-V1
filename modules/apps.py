@@ -1,4 +1,5 @@
 import os  
+import subprocess
 from modules.voice import speak  
 from modules.config import VSCODE_PATH, YOUTUBE_URL
 
@@ -6,8 +7,8 @@ app_commands = {
     "open notepad": lambda: os.startfile("notepad.exe"),  
     "open calculator": lambda: os.startfile("calc.exe"),  
     "open chrome": lambda: os.startfile("chrome.exe"),  
-    "open vscode": lambda: os.startfile(VSCODE_PATH),  
-    "open vs code": lambda: os.startfile(VSCODE_PATH),
+    "open vscode": lambda: subprocess.Popen([VSCODE_PATH]),  
+    "open vs code": lambda: subprocess.Popen([VSCODE_PATH]),
     "open youtube": lambda: os.startfile(YOUTUBE_URL)
 }  
 
@@ -29,11 +30,21 @@ def launch_app(app_name: str):
         "notepad": "notepad.exe",
         "calculator": "calc.exe",
         "chrome": "chrome.exe",
-        "vscode": VSCODE_PATH,
-        "vs code": VSCODE_PATH,
         "youtube":  YOUTUBE_URL
      
      }
+
+
+    if app_name in ["vscode", "vs code", "visual studio code"]:
+         try:
+              speak(f"Opening {app_name}")
+              subprocess.Popen([VSCODE_PATH])
+              return f"{app_name} launched successfully."
+         except Exception as e:
+          print(f"launch_error: {e}")
+          speak(f"sorry, {app_name} could not be opened.")
+          return f"failed to launch {app_name}: {e}"
+              
 
     if app_name not in app_map:
         return f"Application '{app_name}' not found."
