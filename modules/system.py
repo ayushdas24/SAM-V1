@@ -18,12 +18,19 @@ def lock_system():
 
 def system_status():  
     battery = psutil.sensors_battery()  
+
     if battery:  
         percent = battery.percent  
         charging = "charging" if battery.power_plugged else "not charging"  
-        speak(f"your system battery is at {percent} percent and it is {charging}")  
-    else:  
-        speak("Sorry, i couldn't fetch battery information.")  
+        status = f"Battery is at {percent}% and is currently {charging}"
+        print(f"[system] {status}")
+        speak(status)
+        return status 
+    else:
+        msg= "Sorry, I couldn't fetch battery information."  
+        print(f"[system] {msg}")
+        speak(msg)
+        return msg
 
 def volume_up():  
     speak("Increasing volume")  

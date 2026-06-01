@@ -4,7 +4,7 @@ import threading
 import os
 import sys
 from dotenv import load_dotenv
-from modules import voice, brain
+from modules import voice, brain, router
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dedsec_secret'
@@ -51,10 +51,16 @@ def sam_loop():
         # EXIT
         if "exit" in command or "quit" in command:
             send_update("OFFLINE", "Systems offline.")
-            voice.speak("Systems offline.")
+            voice.speak_now("Systems offline.")
             os._exit(0)
 
-        # ROUTING ELIMINATED: Send raw command straight to the Agentic Function Crawler
+        # ROUTING Local command first: Send raw command straight to the Agentic Function Crawler
+        handled_locally = router.route_command(command)
+
+        if handled_locally:
+            send_update("RESPONDING", "Command executed locally")
+            continue 
+
         if SAM_V1_BRAIN and len(command) > 1:
             print("!!! TRIGGERED: AUTONOMOUS BRAIN !!!")
             send_update("THINKING", "Consulting Payload Matrix...")
@@ -62,6 +68,7 @@ def sam_loop():
             print(f"SAM: {ai_reply}")
             send_update("RESPONDING", ai_reply)
             voice.speak(ai_reply)
+
         elif not SAM_V1_BRAIN:
             send_update("ERROR", "Neural link offline.")
             voice.speak("My Neural link is down, sir. I cannot execute tools.")

@@ -35,6 +35,7 @@ def route_command(command: str) -> bool:
 
     for trigger, action in COMMAND_MAP:
         if trigger in command:
+            print(f"[Router] Match trigger: {trigger}")
             action(command)
             return True
 

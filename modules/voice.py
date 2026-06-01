@@ -50,14 +50,17 @@ def listen_for_wake_word(wake_word: str) -> bool:
     recognizer.dynamic_energy_threshold = True
 
     try:
-        with sr.Microphone() as source:
-            recognizer.adjust_for_ambient_noise(source, duration=0.2)
-            audio = recognizer.listen(source, timeout=3, phrase_time_limit=3)
+        with sr.Microphone(device_index=1) as source:
+            recognizer.adjust_for_ambient_noise(source, duration=0.5)
+            audio = recognizer.listen(source, timeout=5, phrase_time_limit=4)
 
         text = recognizer.recognize_google(audio).lower()
         print(f"[Passive] Heard: {text}")
 
-        if wake_word in text:
+        wake_word = ["sam", "samm", "some", "sum", "spam", "slam", "ham", "cam"]
+
+        if any(word in text for word in wake_word):
+            print("[passive] wake word detected!")
             return True
 
     except sr.WaitTimeoutError:
@@ -81,8 +84,8 @@ def listen_for_command() -> str | None:
     recognizer.dynamic_energy_threshold = True
 
     try:
-        with sr.Microphone() as source:
-            recognizer.adjust_for_ambient_noise(source, duration=0.3)
+        with sr.Microphone(device_index=1) as source:
+            recognizer.adjust_for_ambient_noise(source, duration=0.5)
             print("[SAM] Ready - speak your command...")
 
             audio = recognizer.listen(source, timeout=10 , phrase_time_limit=8)
@@ -92,7 +95,7 @@ def listen_for_command() -> str | None:
         return command
     
     except sr.WaitTimeoutError:
-        speak("I dont hear anything, Sir.")
+        speak("I don't hear anything, Sir.")
         return None
     except sr.UnknownValueError:
         speak("couldn't catch that.")

@@ -18,7 +18,7 @@ class SAMGenerativeBrain:
         
         # Inject the Tool Payload and System Identity into the Core
         self.model = genai.GenerativeModel(
-            model_name='gemini-1.5-flash',
+            model_name='gemini-2.0-flash',
             tools=TOOLS_LIST,
             system_instruction=self.identity
         )
@@ -34,8 +34,13 @@ class SAMGenerativeBrain:
             # We no longer manually prepend the identity string; it is baked into the model architecture!
             # The chat object inherently remembers previous messages across the loop (Stateful Context Memory)
             response = self.chat.send_message(user_input)
-            
             return response.text
+        
         except Exception as e:
+            error_text = str(e)
             print(f"Brain Error: {e}")
-            return "My neural link is flickering, sir. Encountered an execution error in the tool pipeline."
+
+            if "429" in error_text or "Quota exceeded" in error_text:
+             return "Gemini quota is exhausted right now, sir. Local commands are still online."
+    
+        return "My neural link is flickering, sir. Encountered an execution error in the tool pipeline."

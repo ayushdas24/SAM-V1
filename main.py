@@ -5,10 +5,16 @@ from modules import voice, router, brain
 
 # Load environment variables
 load_dotenv()
+
+print("=" *50)
+print("current Directory:", os.getcwd())
+print("API_KEY RAW:", repr(os.getenv("GEMINI_API_KEY",)))
+print("=" * 50)
+
 API_KEY = os.getenv("GEMINI_API_KEY", "")
 
 if not API_KEY or API_KEY == "your_api_key_here":
-    voice.speak("Warning. Gemini API Key is missing. Please check your dot env file.")
+    voice.speak_now("Warning. Gemini API Key is missing. Please check your dot env file.")
     print("[WARNING] GEMINI_API_KEY not found in .env. Brain module disabled.")
     # We could exit, but maybe they just want local commands
     SAM_V1_BRAIN = None
@@ -16,7 +22,7 @@ else:
     SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key=API_KEY)
 
 # Initial Greeting
-voice.speak("All systems online, sir.")  
+voice.speak_now("All systems online, sir.")  
 
 while True:  
     # 1. Passive Listening Phase
@@ -38,7 +44,7 @@ while True:
 
     # EXIT
     if "exit" in command or "quit" in command:
-        voice.speak("Systems offline.")
+        voice.speak_now("Systems offline.")
         sys.exit()
 
     # ROUTE LOCAL COMMANDS

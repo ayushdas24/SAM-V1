@@ -1,28 +1,43 @@
-import pyjokes  
-import pyautogui  
-from datetime import datetime  
-from modules.voice import speak  
+import pyjokes
+import pyautogui
+from datetime import datetime
+from modules.voice import speak
 
-def tell_jokes():  
-    joke = pyjokes.get_joke()  
-    speak(joke)  
+def tell_jokes():
+    joke = pyjokes.get_joke()
+    print(f"[fun] joke: {joke}")
+    speak(joke)
+    return joke
 
-def tell_time():  
-    now = datetime.now()  
-    current_time = now.strftime("%H:%M")  
-    speak(f"The current time is {current_time}")  
+def get_time():
+    now = datetime.now()
+    time_str = now.strftime("%H:%M")
+    return time_str
 
-def tell_date():  
-    today = datetime.today()  
-    date_str = today.strftime("%B %d, %Y")  
-    speak(f"Todays date is {date_str}")  
+def tell_time():
+    time_str = get_time()
+    print(f"[fun] time is {time_str}")
+    speak(f"The current time is {time_str}")
+    return time_str
 
-def take_screenshot():  
-    try:  
-        speak("Take a screenshot")  
-        screenshot = pyautogui.screenshot()  
-        screenshot.save("screenshot.png")  
-        speak("Screenshot saved as screenshot.png")  
-    except Exception as e:  
-        print("Screenshot error:", e)  
-        speak("I couldn't take a screenshot")
+def get_date():
+    return datetime.now().strftime("%B %d, %Y")
+    
+
+def tell_date():
+    date_str = get_date()
+    print(f"[fun] Date is {date_str}")
+    speak(f"today's date is {date_str}")
+    return date_str
+
+def take_screenshot():
+    try:
+        screenshot = pyautogui.screenshot()
+        file_path = "screenshot.png"
+        screenshot.save(file_path)
+        speak("screenshot taken and saved as screenshot.png")
+        return f"screenshot saved at {file_path}"
+    except Exception as e:
+        print("screenshot failed:",e)
+        speak("sorry i couldn't take the screenshot")
+        return f"screenshot failed: {e}"

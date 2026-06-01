@@ -42,19 +42,17 @@ def sys_status() -> str:
 
 def util_get_time() -> str:
     """Retrieves the exact current local time."""
-    fun.get_time()
-    return "Action Successful: Time reported directly to user."
+    return fun.get_time()
+    
 
 def util_get_date() -> str:
     """Retrieves the current local date."""
-    fun.get_date()
-    return "Action Successful: Date reported directly to user."
+    return fun.get_date()
 
 def util_take_screenshot() -> str:
     """Takes a graphical screen capture and writes the evidence to local disk."""
-    fun.take_screenshot()
-    return "Action Successful: Screenshot captured and saved to disk."
-
+    return fun.take_screenshot()
+    
 def search_wikipedia_duckduckgo(query: str) -> str:
     """Searches the internet / DuckDuckGo for general knowledge, data lookup, or wiki dumps."""
     web.search_web(query)
@@ -72,9 +70,8 @@ def play_youtube(query: str) -> str:
 
 def launch_application(app_name: str) -> str:
     """Launches a desktop application by name natively (e.g. discord, notepad, chrome, vscode, terminal)."""
-    apps.launch_app(app_name)
-    return f"Action Successful: Requested execution payload for application: {app_name}."
-
+    return apps.launch_app(app_name)
+   
 # The Core Arsenal Payload mapped for GenAI Initialization
 TOOLS_LIST = [
     sys_volume_up, sys_volume_down, sys_mute, sys_lock,
