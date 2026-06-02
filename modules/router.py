@@ -24,6 +24,13 @@ COMMAND_MAP = [
     ("google",          lambda cmd: web.google_search(cmd.replace("google", "").strip())),
 ]
 
+LOCAL_KEYWORDS = [
+    "volume up", "volume down", "mute", "shutdown", "restart", "battery", "status",
+    "lock", "screenshot", "what time", "what's the time", "time",
+    "what date", "date", "tell me a joke", "joke",
+    "play", "search for", "look up", "search", "google"
+]
+
 def route_command(command: str) -> bool:
     """
     Called by main.py for every spoken command.
@@ -38,5 +45,9 @@ def route_command(command: str) -> bool:
             print(f"[Router] Match trigger: {trigger}")
             action(command)
             return True
+        
+    if any(word in command for word in LOCAL_KEYWORDS):
+        print("[Router] Command contains local keyword but no trigger matched.")
+        return True
 
     return False
