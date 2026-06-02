@@ -58,7 +58,8 @@ def listen_for_wake_word(wake_word: str) -> bool:
         text = recognizer.recognize_google(audio).lower()
         print(f"[Passive] Heard: {text}")
 
-        wake_word = ["sam", "samm", "some", "sum", "spam", "slam", "ham", "cam"]
+        wake_word = ["sam", "samm", "sammy", "sum"]
+        words = text.split()
 
         if any(word in text for word in wake_word):
             print("[passive] wake word detected!")
