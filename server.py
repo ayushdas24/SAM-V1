@@ -4,7 +4,8 @@ import threading
 import os
 import sys
 from dotenv import load_dotenv
-from modules import voice, brain, router
+from modules import voice, router
+from modules.brain import gemini_brain
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dedsec_secret'
@@ -18,7 +19,7 @@ if not API_KEY or API_KEY == "your_api_key_here":
     print("[WARNING] GEMINI_API_KEY not found in .env. Brain module disabled.")
     SAM_V1_BRAIN = None
 else:
-    SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key=API_KEY)
+    SAM_V1_BRAIN = gemini_brain.SAMGenerativeBrain(api_key=API_KEY)
 
 def send_update(status, message=""):
     """Helper to emit websocket updates"""

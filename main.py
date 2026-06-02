@@ -1,7 +1,8 @@
 import os
 import sys
 from dotenv import load_dotenv
-from modules import voice, router, brain
+from modules import voice, router
+from modules.brain import gemini_brain
 
 # Load environment variables
 load_dotenv()
@@ -19,7 +20,7 @@ if not API_KEY or API_KEY == "your_api_key_here":
     # We could exit, but maybe they just want local commands
     SAM_V1_BRAIN = None
 else:
-    SAM_V1_BRAIN = brain.SAMGenerativeBrain(api_key=API_KEY)
+    SAM_V1_BRAIN = gemini_brain.SAMGenerativeBrain(api_key=API_KEY)
 
 # Initial Greeting
 voice.speak_now("All systems online, sir.")  
