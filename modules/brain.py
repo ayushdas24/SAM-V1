@@ -39,6 +39,6 @@ class SAMGenerativeBrain:
             print(f"Brain Error: {e}")
 
             if "429" in error_text or "Quota exceeded" in error_text:
-             return "Gemini quota is exhausted right now, sir. Local commands are still online."
+                return "Gemini quota is exhausted right now, sir. Local commands are still online."
     
             return "My neural link is flickering, sir. Encountered an execution error in the tool pipeline."
