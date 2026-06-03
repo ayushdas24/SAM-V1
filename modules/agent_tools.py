@@ -48,7 +48,7 @@ def util_get_date() -> str:
 
 def util_take_screenshot() -> str:
     """Takes a graphical screen capture and writes the evidence to local disk."""
-    return fun.take_screenshot()
+    return fun.take_screenshot(should_speak=False)
     
 def search_wikipedia_duckduckgo(query: str) -> str:
     """Searches the internet / DuckDuckGo for general knowledge, data lookup, or wiki dumps."""
@@ -67,7 +67,7 @@ def play_youtube(query: str) -> str:
 
 def launch_application(app_name: str) -> str:
     """Launches a desktop application by name natively (e.g. discord, notepad, chrome, vscode, terminal)."""
-    return apps.launch_app(app_name)
+    return apps.launch_app(app_name, should_speak=False)
    
 # The Core Arsenal Payload mapped for GenAI Initialization
 TOOLS_LIST = [

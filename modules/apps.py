@@ -12,18 +12,20 @@ app_commands = {
     "open youtube": lambda: os.startfile(YOUTUBE_URL)
 }  
 
-def handle_apps(command):  
+def handle_apps(command, should_speak=True):  
     for app in app_commands:  
         if app in command:  
             try:  
-                speak(f"Opening {app.replace('open ', '')}")  
+                if should_speak:
+                    speak(f"Opening {app.replace('open ', '')}")  
                 app_commands[app]()  
             except Exception:  
-                speak(f"Sorry, {app.replace('open ', '')} could not be opened.")  
+                if should_speak:
+                    speak(f"Sorry, {app.replace('open ', '')} could not be opened.")  
             return True  
     return False
 
-def launch_app(app_name: str):
+def launch_app(app_name: str, should_speak=True):
     app_name = app_name.lower().strip()
 
     app_map = {
@@ -37,12 +39,18 @@ def launch_app(app_name: str):
 
     if app_name in ["vscode", "vs code", "visual studio code"]:
          try:
-              speak(f"Opening {app_name}")
+              if should_speak:
+                  speak(f"Opening {app_name}")
+
               subprocess.Popen([VSCODE_PATH])
               return f"{app_name} launched successfully."
+         
          except Exception as e:
           print(f"launch_error: {e}")
-          speak(f"sorry, {app_name} could not be opened.")
+
+          if should_speak:
+              speak(f"sorry, {app_name} could not be opened.")
+
           return f"failed to launch {app_name}: {e}"
               
 
@@ -50,10 +58,16 @@ def launch_app(app_name: str):
         return f"Application '{app_name}' not found."
     
     try:
-            speak(f"opening {app_name}")
+            if should_speak:
+                speak(f"opening {app_name}")
+
             os.startfile(app_map[app_name])
             return f"{app_name} launched successfully."
+    
     except Exception as e:
             print(f"launch error: {e}")
-            speak(f"sorry, {app_name} could not be opened.")
+
+            if should_speak:
+                speak(f"sorry, {app_name} could not be opened.")
+                
             return f"failed to launch {app_name}: {e}"
