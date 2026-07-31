@@ -3,13 +3,14 @@ from flask_socketio import SocketIO
 import threading
 import os
 import sys
+import secrets
 from dotenv import load_dotenv
 from modules import voice, router
 from modules.brain import gemini_brain
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'dedsec_secret'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+app.config['SECRET_KEY'] = os.getenv("SAM_SECRET_KEY")
+socketio = SocketIO(app, async_mode='threading')
 
 # Load environment variables
 load_dotenv()
@@ -82,4 +83,4 @@ if __name__ == '__main__':
     # Start SAM core loop in a background thread
     threading.Thread(target=sam_loop, daemon=True).start()
     print("Starting DedSec Web Interface on http://localhost:5000")
-    socketio.run(app, debug=False, host='0.0.0.0', port=5000)
+    socketio.run(app, debug=False, host='127.0.0.1', port=5000)

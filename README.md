@@ -1,5 +1,10 @@
 # 🧠 SAM-V1 — System Automation Module
 
+> [!IMPORTANT]
+> **Archived:** SAM-V1 is frozen and no longer under active development.
+> It is preserved as the original proof of concept and as a reference for SAM-V2.
+> No new features, refactors, or maintenance fixes are planned for this version.
+
 > **"All systems online, sir. How may I assist?"**
 
 SAM-V1 is a voice-controlled AI assistant built in Python that combines local system automation, voice interaction, and Generative AI capabilities into a single modular framework.

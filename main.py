@@ -9,7 +9,7 @@ load_dotenv()
 
 print("=" *50)
 print("current Directory:", os.getcwd())
-print("API_KEY RAW:", repr(os.getenv("GEMINI_API_KEY",)))
+print("Gemini API Key configured:", bool(os.getenv("GEMINI_API_KEY", "")))
 print("=" * 50)
 
 API_KEY = os.getenv("GEMINI_API_KEY", "")
